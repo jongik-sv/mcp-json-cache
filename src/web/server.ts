@@ -6,8 +6,10 @@
 import express, { Express, Request, Response, NextFunction } from 'express';
 import { createServer, Server as HttpServer } from 'http';
 import { Server as SocketIOServer } from 'socket.io';
-import { join } from 'path';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
 import open from 'open';
+import { createServer as createNetServer } from 'net';
 import { CacheManager } from '../cache/CacheManager.js';
 import { logger } from '../utils/logger.js';
 import { setupRoutes } from './routes.js';
@@ -72,7 +74,10 @@ export class WebServer {
     });
 
     // 정적 파일 서빙 (public 디렉토리)
-    const publicPath = join(process.cwd(), 'public');
+    // ES6 모듈에서 __dirname 사용하기 위해 fileURLToPath 사용
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = dirname(__filename);
+    const publicPath = join(__dirname, '../../public');
     this.app.use(express.static(publicPath));
 
     // 요청 로깅
@@ -104,7 +109,9 @@ export class WebServer {
 
     // 루트 경로
     this.app.get('/', (req, res) => {
-      res.sendFile(join(process.cwd(), 'public', 'index.html'));
+      const __filename = fileURLToPath(import.meta.url);
+      const __dirname = dirname(__filename);
+      res.sendFile(join(__dirname, '../../public', 'index.html'));
     });
 
     // 404 핸들러
@@ -125,11 +132,60 @@ export class WebServer {
   }
 
   /**
+   * 포트 사용 가능 여부 확인
+   */
+  private async isPortAvailable(port: number, host: string): Promise<boolean> {
+    return new Promise((resolve) => {
+      const tester = createNetServer()
+        .once('error', () => resolve(false))
+        .once('listening', () => {
+          tester.once('close', () => resolve(true)).close();
+        })
+        .listen(port, host);
+    });
+  }
+
+  /**
+   * 사용 가능한 포트 찾기 (시작 포트부터 +10 범위 내에서)
+   */
+  private async findAvailablePort(startPort: number, host: string, maxAttempts = 10): Promise<number> {
+    for (let attempt = 0; attempt < maxAttempts; attempt++) {
+      const port = startPort + attempt;
+      const available = await this.isPortAvailable(port, host);
+
+      if (available) {
+        if (attempt > 0) {
+          this.serverLogger.info('대체 포트 발견', {
+            requestedPort: startPort,
+            foundPort: port,
+            attempt: attempt + 1
+          });
+        }
+        return port;
+      }
+    }
+
+    throw new Error(`사용 가능한 포트를 찾을 수 없습니다 (시도 범위: ${startPort}-${startPort + maxAttempts - 1})`);
+  }
+
+  /**
    * 서버 시작
    */
   public async start(): Promise<void> {
-    return new Promise((resolve, reject) => {
-      try {
+    try {
+      // 사용 가능한 포트 찾기
+      const availablePort = await this.findAvailablePort(this.config.port, this.config.host);
+
+      // 포트가 변경되었으면 설정 업데이트
+      if (availablePort !== this.config.port) {
+        this.serverLogger.warn('요청한 포트가 사용 중', {
+          requestedPort: this.config.port,
+          assignedPort: availablePort
+        });
+        this.config.port = availablePort;
+      }
+
+      return new Promise((resolve, reject) => {
         this.httpServer.listen(this.config.port, this.config.host, async () => {
           const url = `http://${this.config.host}:${this.config.port}`;
           this.serverLogger.info('웹 서버 시작', {
@@ -154,12 +210,12 @@ export class WebServer {
           this.serverLogger.error('웹 서버 에러', error);
           reject(error);
         });
+      });
 
-      } catch (error) {
-        this.serverLogger.error('웹 서버 시작 실패', error);
-        reject(error);
-      }
-    });
+    } catch (error) {
+      this.serverLogger.error('웹 서버 시작 실패', error);
+      throw error;
+    }
   }
 
   /**
