@@ -1,0 +1,142 @@
+{
+  "P001": {
+    "id": "P001",
+    "name": "Wireless Bluetooth Headphones",
+    "category": "Electronics",
+    "price": 79.99,
+    "currency": "USD",
+    "description": "Premium wireless headphones with active noise cancellation",
+    "specs": {
+      "brand": "AudioTech",
+      "model": "AT-WH1000",
+      "color": "Black",
+      "weight": "250g",
+      "batteryLife": "30 hours",
+      "connectivity": ["Bluetooth 5.0", "3.5mm jack"]
+    },
+    "inventory": {
+      "stock": 145,
+      "warehouse": "WH-01",
+      "reorderLevel": 50
+    },
+    "metadata": {
+      "createdAt": "2024-01-10T10:00:00Z",
+      "updatedAt": "2025-10-10T15:30:00Z",
+      "isActive": true,
+      "rating": 4.5,
+      "reviews": 328
+    }
+  },
+  "P002": {
+    "id": "P002",
+    "name": "Smart Fitness Watch",
+    "category": "Wearables",
+    "price": 199.99,
+    "currency": "USD",
+    "description": "Advanced fitness tracker with heart rate monitoring and GPS",
+    "specs": {
+      "brand": "FitLife",
+      "model": "FL-SW200",
+      "color": "Silver",
+      "weight": "45g",
+      "batteryLife": "7 days",
+      "features": ["Heart Rate Monitor", "GPS", "Sleep Tracking", "Water Resistant"]
+    },
+    "inventory": {
+      "stock": 89,
+      "warehouse": "WH-02",
+      "reorderLevel": 30
+    },
+    "metadata": {
+      "createdAt": "2024-03-15T09:30:00Z",
+      "updatedAt": "2025-10-12T11:20:00Z",
+      "isActive": true,
+      "rating": 4.7,
+      "reviews": 542
+    }
+  },
+  "P003": {
+    "id": "P003",
+    "name": "Ergonomic Office Chair",
+    "category": "Furniture",
+    "price": 349.99,
+    "currency": "USD",
+    "description": "Premium ergonomic chair with lumbar support and adjustable features",
+    "specs": {
+      "brand": "ComfortPro",
+      "model": "CP-EC500",
+      "color": "Gray",
+      "weight": "22kg",
+      "material": "Mesh and Aluminum",
+      "features": ["Adjustable Lumbar Support", "Tilt Mechanism", "Height Adjustment", "5-Year Warranty"]
+    },
+    "inventory": {
+      "stock": 34,
+      "warehouse": "WH-01",
+      "reorderLevel": 20
+    },
+    "metadata": {
+      "createdAt": "2024-02-20T14:15:00Z",
+      "updatedAt": "2025-10-08T10:45:00Z",
+      "isActive": true,
+      "rating": 4.3,
+      "reviews": 215
+    }
+  },
+  "P004": {
+    "id": "P004",
+    "name": "Mechanical Gaming Keyboard",
+    "category": "Electronics",
+    "price": 129.99,
+    "currency": "USD",
+    "description": "RGB mechanical keyboard with customizable switches",
+    "specs": {
+      "brand": "GameGear",
+      "model": "GG-MK100",
+      "color": "Black",
+      "weight": "980g",
+      "switchType": "Cherry MX Red",
+      "features": ["RGB Backlighting", "Programmable Keys", "Anti-Ghosting", "USB-C Connection"]
+    },
+    "inventory": {
+      "stock": 72,
+      "warehouse": "WH-02",
+      "reorderLevel": 40
+    },
+    "metadata": {
+      "createdAt": "2024-04-05T11:00:00Z",
+      "updatedAt": "2025-10-14T16:10:00Z",
+      "isActive": true,
+      "rating": 4.6,
+      "reviews": 412
+    }
+  },
+  "P005": {
+    "id": "P005",
+    "name": "Portable Power Bank",
+    "category": "Electronics",
+    "price": 39.99,
+    "currency": "USD",
+    "description": "High-capacity portable charger with fast charging support",
+    "specs": {
+      "brand": "PowerUp",
+      "model": "PU-PB2000",
+      "color": "White",
+      "weight": "320g",
+      "capacity": "20000mAh",
+      "features": ["Fast Charging", "Dual USB Ports", "LED Indicator", "Compact Design"]
+    },
+    "inventory": {
+      "stock": 256,
+      "warehouse": "WH-01",
+      "reorderLevel": 100
+    },
+    "metadata": {
+      "createdAt": "2024-05-18T13:45:00Z",
+      "updatedAt": "2025-10-15T09:30:00Z",
+      "isActive": true,
+      "rating": 4.4,
+      "reviews": 687
+    }
+  }
+}

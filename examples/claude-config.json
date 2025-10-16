@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "json-cache": {
+      "command": "node",
+      "args": ["C:/project/mcp-json-cache/dist/index.js"],
+      "env": {
+        "JSON_SOURCES": "queries:C:/project/mcp-json-cache/examples/queries.json;legacy:C:/project/mcp-json-cache/examples/legacy.json;users:C:/project/mcp-json-cache/examples/sample1.json"
+      }
+    }
+  }
+}

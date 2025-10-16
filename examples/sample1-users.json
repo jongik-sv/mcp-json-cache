@@ -1,0 +1,92 @@
+{
+  "U001": {
+    "id": "U001",
+    "name": "Alice Johnson",
+    "email": "alice.johnson@example.com",
+    "role": "admin",
+    "department": "Engineering",
+    "profile": {
+      "avatar": "https://example.com/avatars/alice.jpg",
+      "bio": "Senior Software Engineer with 10 years of experience",
+      "skills": ["TypeScript", "React", "Node.js", "Python"],
+      "location": "San Francisco, CA"
+    },
+    "metadata": {
+      "createdAt": "2023-01-15T10:30:00Z",
+      "lastLogin": "2025-10-15T14:22:00Z",
+      "isActive": true
+    }
+  },
+  "U002": {
+    "id": "U002",
+    "name": "Bob Smith",
+    "email": "bob.smith@example.com",
+    "role": "developer",
+    "department": "Engineering",
+    "profile": {
+      "avatar": "https://example.com/avatars/bob.jpg",
+      "bio": "Full-stack developer passionate about clean code",
+      "skills": ["JavaScript", "Vue.js", "Express", "MongoDB"],
+      "location": "New York, NY"
+    },
+    "metadata": {
+      "createdAt": "2023-03-20T09:15:00Z",
+      "lastLogin": "2025-10-15T11:45:00Z",
+      "isActive": true
+    }
+  },
+  "U003": {
+    "id": "U003",
+    "name": "Carol White",
+    "email": "carol.white@example.com",
+    "role": "designer",
+    "department": "Design",
+    "profile": {
+      "avatar": "https://example.com/avatars/carol.jpg",
+      "bio": "UX/UI Designer focused on user-centered design",
+      "skills": ["Figma", "Sketch", "Adobe XD", "Prototyping"],
+      "location": "Los Angeles, CA"
+    },
+    "metadata": {
+      "createdAt": "2023-05-10T14:00:00Z",
+      "lastLogin": "2025-10-14T16:30:00Z",
+      "isActive": true
+    }
+  },
+  "U004": {
+    "id": "U004",
+    "name": "David Lee",
+    "email": "david.lee@example.com",
+    "role": "developer",
+    "department": "Engineering",
+    "profile": {
+      "avatar": "https://example.com/avatars/david.jpg",
+      "bio": "Backend developer specializing in microservices",
+      "skills": ["Java", "Spring Boot", "Kubernetes", "PostgreSQL"],
+      "location": "Seattle, WA"
+    },
+    "metadata": {
+      "createdAt": "2023-07-25T11:20:00Z",
+      "lastLogin": "2025-10-15T13:10:00Z",
+      "isActive": true
+    }
+  },
+  "U005": {
+    "id": "U005",
+    "name": "Emma Davis",
+    "email": "emma.davis@example.com",
+    "role": "manager",
+    "department": "Product",
+    "profile": {
+      "avatar": "https://example.com/avatars/emma.jpg",
+      "bio": "Product Manager with focus on user experience",
+      "skills": ["Product Strategy", "Agile", "User Research", "Analytics"],
+      "location": "Austin, TX"
+    },
+    "metadata": {
+      "createdAt": "2022-11-05T08:45:00Z",
+      "lastLogin": "2025-10-15T09:00:00Z",
+      "isActive": true
+    }
+  }
+}

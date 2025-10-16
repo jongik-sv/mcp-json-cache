@@ -1,0 +1,74 @@
+{
+  "users": {
+    "user1": {
+      "id": "user1",
+      "name": "Alice",
+      "age": 30,
+      "profile": {
+        "email": "alice@example.com",
+        "phone": "123-456-7890",
+        "address": {
+          "street": "123 Main St",
+          "city": "Seoul",
+          "country": "Korea"
+        }
+      }
+    },
+    "user2": {
+      "id": "user2",
+      "name": "Bob",
+      "age": 25,
+      "profile": {
+        "email": "bob@example.com",
+        "phone": "098-765-4321",
+        "address": {
+          "street": "456 Oak Ave",
+          "city": "Busan",
+          "country": "Korea"
+        }
+      }
+    }
+  },
+  "products": {
+    "prod1": {
+      "id": "prod1",
+      "name": "Laptop",
+      "price": 1000,
+      "category": "Electronics",
+      "inventory": {
+        "stock": 50,
+        "reserved": 5,
+        "available": 45
+      }
+    },
+    "prod2": {
+      "id": "prod2",
+      "name": "Mouse",
+      "price": 20,
+      "category": "Electronics",
+      "inventory": {
+        "stock": 200,
+        "reserved": 10,
+        "available": 190
+      }
+    }
+  },
+  "orders": {
+    "order1": {
+      "id": "order1",
+      "user_id": "user1",
+      "items": ["prod1", "prod2"],
+      "total": 1020,
+      "status": "completed",
+      "created": "2025-10-15T14:30:00Z"
+    },
+    "order2": {
+      "id": "order2",
+      "user_id": "user2",
+      "items": ["prod2"],
+      "total": 20,
+      "status": "pending",
+      "created": "2025-10-16T09:15:00Z"
+    }
+  }
+}

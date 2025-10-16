@@ -1,0 +1,30 @@
+{
+  "sources": {
+    "queries": {
+      "name": "queries",
+      "path": "./examples/queries.json",
+      "watch": true,
+      "primary": true
+    },
+    "legacy": {
+      "name": "legacy",
+      "path": "./examples/legacy.json",
+      "watch": false
+    },
+    "users": {
+      "name": "users",
+      "path": "./examples/sample1.json",
+      "watch": false
+    }
+  },
+  "options": {
+    "autoReload": true,
+    "cacheSize": 1000,
+    "logLevel": "info"
+  },
+  "web": {
+    "enabled": true,
+    "port": 6315,
+    "host": "localhost"
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "legacy_system": {
+    "user_management": {
+      "get_user": "SELECT * FROM USERS WHERE USER_ID = :USER_ID",
+      "create_user": "INSERT INTO USERS (USER_ID, NAME, EMAIL) VALUES (:USER_ID, :NAME, :EMAIL)",
+      "update_user": "UPDATE USERS SET NAME = :NAME, EMAIL = :EMAIL WHERE USER_ID = :USER_ID",
+      "delete_user": "DELETE FROM USERS WHERE USER_ID = :USER_ID"
+    },
+    "inventory": {
+      "get_stock": "SELECT * FROM INVENTORY WHERE ITEM_CODE = :ITEM_CODE",
+      "update_stock": "UPDATE INVENTORY SET QUANTITY = :QUANTITY WHERE ITEM_CODE = :ITEM_CODE",
+      "list_low_stock": "SELECT * FROM INVENTORY WHERE QUANTITY < MIN_QUANTITY"
+    },
+    "reports": {
+      "daily_sales": "SELECT DATE, COUNT(*), SUM(AMOUNT) FROM SALES GROUP BY DATE",
+      "monthly_summary": "SELECT MONTH, COUNT(*), SUM(AMOUNT) FROM SALES GROUP BY MONTH",
+      "top_products": "SELECT PRODUCT_ID, COUNT(*) as COUNT FROM SALES_DETAILS GROUP BY PRODUCT_ID ORDER BY COUNT DESC"
+    }
+  },
+  "system_config": {
+    "database": {
+      "host": "localhost",
+      "port": 1521,
+      "sid": "ORCL"
+    },
+    "cache": {
+      "timeout": 300,
+      "max_size": 1000
+    },
+    "api": {
+      "rate_limit": 100,
+      "timeout": 30
+    }
+  },
+  "migrations": {
+    "latest_version": "2.1.0",
+    "applied": [
+      "1.0.0_initial_schema",
+      "1.1.0_add_user_roles",
+      "1.2.0_inventory_tracking",
+      "2.0.0_api_v2",
+      "2.1.0_performance_optimization"
+    ]
+  }
+}

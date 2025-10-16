@@ -1,0 +1,51 @@
+{
+  "b17": {
+    "B17R2010.select": {
+      "query": "SELECT * FROM TB_M47_WK_INST_CMN WHERE PROC_CD = :PROC_CD",
+      "description": "B17R2010_작업진행상태를 관제로 전송하기위한 Data를 조회한다.",
+      "params": ["PROC_CD"]
+    },
+    "B17R2010.select.1row": {
+      "query": "SELECT * FROM (SELECT * FROM TB_M47_WK_INST_CMN WHERE PROC_CD = :PROC_CD ORDER BY WORD_DD) WHERE ROWNUM = 1",
+      "description": "B17R2010_작업진행상태 단일 행 조회",
+      "params": ["PROC_CD"]
+    },
+    "B17R2010.L2N.select": {
+      "query": "SELECT 'N' AS L2_SND_YN FROM TB_M47_WK_INST_CMN WHERE PROC_CD = :PROC_CD",
+      "description": "B17R2010_L2 전송 안함 상태 조회",
+      "params": ["PROC_CD"]
+    },
+    "B17R2010.ann.select": {
+      "query": "SELECT * FROM TB_M47_WK_INST_CMN WHERE ANN_BTH_CRT_DH = TO_DATE(:ANN_BTH_CRT_DH,'YYYYMMDDHH24MISS')",
+      "description": "B17R2010_배치작업 조회",
+      "params": ["ANN_BTH_CRT_DH"]
+    },
+    "B17R2010.unload.select": {
+      "query": "SELECT * FROM TB_M47_WK_INST_CMN WHERE COIL_ID = :COIL_ID AND PROC_CD = :PROC_CD",
+      "description": "보급/투입 재료진행상태전문 정보 조회",
+      "params": ["COIL_ID", "PROC_CD"]
+    },
+    "B17R2010.cancel.select": {
+      "query": "SELECT WK_CNL_TP FROM TB_M47_WK_INST_CMN WHERE COIL_ID = :COIL_ID AND PROC_CD = :PROC_CD",
+      "description": "보급/투입 취소 재료진행상태전문 정보 조회",
+      "params": ["COIL_ID", "PROC_CD", "WK_CNL_TP"]
+    },
+    "B17R2010.procInput.select": {
+      "query": "SELECT * FROM TB_M47_COIL_CMN WHERE PROC_CD = :PROC_CD AND COIL_ID = :COIL_ID",
+      "description": "공정투입 재료진행상태 정보 조회",
+      "params": ["PROC_CD", "COIL_ID"]
+    }
+  },
+  "b47": {
+    "B47SA508_1.select": {
+      "query": "SELECT COIL_ID, MO_NO FROM TB_M47_WK_INST_CMN WHERE COIL_ID = :COIL_ID",
+      "description": "부산_조업관리_송신_작업실적요구 송신 조회",
+      "params": ["COIL_ID"]
+    }
+  },
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2025-10-16T10:30:00Z",
+    "description": "M47 시스템 쿼리 데이터"
+  }
+}
