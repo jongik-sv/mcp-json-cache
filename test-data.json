@@ -1,0 +1,50 @@
+{
+  "user_001": {
+    "name": "John Doe",
+    "email": "john@example.com",
+    "age": 30,
+    "role": "developer"
+  },
+  "user_002": {
+    "name": "Jane Smith",
+    "email": "jane@example.com",
+    "age": 28,
+    "role": "designer"
+  },
+  "user_003": {
+    "name": "Bob Johnson",
+    "email": "bob@example.com",
+    "age": 35,
+    "role": "manager"
+  },
+  "product_001": {
+    "name": "Laptop",
+    "price": 1299.99,
+    "category": "electronics",
+    "stock": 50
+  },
+  "product_002": {
+    "name": "Mouse",
+    "price": 29.99,
+    "category": "electronics",
+    "stock": 200
+  },
+  "order_001": {
+    "user": "user_001",
+    "product": "product_001",
+    "quantity": 1,
+    "status": "completed",
+    "date": "2025-10-15"
+  },
+  "order_002": {
+    "user": "user_002",
+    "product": "product_002",
+    "quantity": 3,
+    "status": "pending",
+    "date": "2025-10-16"
+  },
+  "config.database.host": "localhost",
+  "config.database.port": 5432,
+  "config.api.timeout": 3000,
+  "config.api.retries": 3
+}

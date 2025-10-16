@@ -1,0 +1,11 @@
+{
+  "test": "value",
+  "foo": "bar",
+  "user": {
+    "name": "John Doe",
+    "age": 30,
+    "profile": {
+      "email": "john@example.com"
+    }
+  }
+}

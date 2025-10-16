@@ -1,0 +1,97 @@
+{
+    "b17": {
+        "B17R2010.select": {
+            "id": "B17R2010.select",
+            "desc": "B17R2010_작업진행상태를 관제로 전송하기위한 Data를 조회한다.",
+            "file_name": "B17R2010-query.glue_sql",
+            "query_map_desc": "B17R2010_재료진행상태관제전송",
+            "query": "<![CDATA[\nSELECT  /*+ M47   재료진행상태관제전송   B17R2010.select   박철오  */\n    -- 관제로 전송할 정보 조회\n    -- WK_TP => \n    -- 'I' => 작업지시\n    -- 'U' => 보급\n    -- 'S' => 공정\n    -- 'A' => 소둔\n    -- 'E' => 보급시점 L2전송\n    'B17R2010'    AS TC_CD\n    ,MESAPUSER.PL_M00_CONST_VALUE.FAC_CD_BUSAN AS FAC_CD\n    ,A.PROC_CD\n    ,C.MO_NO\n    ,A.MO_PTL_SEQ_NO\n    ,A.COIL_ID\n    ,A.PLN_PROC_SEQ\n    ,DECODE(:WK_TP,'I','F','E','F','U','G','S','G','') AS PRG_CD\n    ,DECODE(:WK_TP,'I','F1','E','F1','U','G1','S','G2','') AS WK_PRG_STS\n    ,DECODE(:WK_TP,'I','Y','U','Y','N') AS L2_SND_YN\n    ,1 AS L2_SND_QTY\n    ,NULL AS QRT_END_YN\n    ,NULL AS WDR_END_YN\n    ,DECODE(:WK_TP,'U','Y','N') AS SLP_END_YN\n    ,NULL AS ENT_PTL_YN\n    ,DECODE(:WK_TP,'S',TO_CHAR(NVL(TO_CHAR('','YYYYMMDDHH24MISS'), SYSDATE),'YYYYMMDDHH24MISS')) AS WK_STR_DH\n    ,NULL AS WK_END_DH    \n    ,NULL AS PCOIL_ID\n    ,NULL AS SPARE\n    ,DECODE(:WK_TP,'U','Y','N') AS CHG_WRG_YN\nFROM \n     TB_M47_COIL_CMN    C\n    ,TB_M47_WK_INST_CMN A\nWHERE\n        C.COIL_ID = A.COIL_ID\n    AND C.PROC_CD = A.PROC_CD\n    AND C.PLN_PROC_SEQ = A.PLN_PROC_SEQ\n    AND C.RCD_STS_TP IN ('1','2')\n    AND C.WK_PRG_STS IN ('E1','F1')\n    AND NVL(A.L2_SND_YN,'N')='N'\n    AND NVL(A.CHG_WRG_YN,'N')='N'\n    AND A.PROC_CD= :PROC_CD\n         ]]>"
+        },
+        "B17R2010.select.1row": {
+            "id": "B17R2010.select.1row",
+            "desc": "B17R2010_작업진행상태를 관제로 전송하기위한 Data를 조회한다.",
+            "file_name": "B17R2010-query.glue_sql",
+            "query_map_desc": "B17R2010_재료진행상태관제전송",
+            "query": "<![CDATA[\nSELECT  /*+ M47   재료진행상태관제전송   B17R2010.select.1row   박철오  */ \t\n    T.*\n FROM \n    (SELECT  \n            -- 관제로 전송할 정보 조회\n            -- WK_TP => \n            -- 'I' => 작업지시\n            -- 'U' => 보급\n            -- 'S' => 공정\n            -- 'A' => 소둔\n            -- 'E' => 보급시점 L2전송\n            'B17R2010'    AS TC_CD\n            ,MESAPUSER.PL_M00_CONST_VALUE.FAC_CD_BUSAN AS FAC_CD\n            ,A.PROC_CD\n            ,C.MO_NO\n            ,A.MO_PTL_SEQ_NO\n            ,A.COIL_ID\n            ,A.PLN_PROC_SEQ\n            ,DECODE(:WK_TP,'I','F','E','F','U','G','S','G','') AS PRG_CD\n            ,DECODE(:WK_TP,'I','F1','E','F1','U','G1','S','G2','') AS WK_PRG_STS\n            ,DECODE(:WK_TP,'I','Y','U','Y','N') AS L2_SND_YN\n            ,(SELECT \n                    COUNT(*) \n              FROM TB_M47_COIL_CMN    C\n                  ,TB_M47_WK_INST_CMN A\n              WHERE\n                    C.COIL_ID = A.COIL_ID\n--                AND C.PROC_CD = A.PROC_CD\n--                AND C.PLN_PROC_SEQ = A.PLN_PROC_SEQ\n                AND C.RCD_STS_TP IN ('1','2')\n                AND C.WK_PRG_STS IN ('E1','F1')\n                AND NVL(A.L2_SND_YN,'N')='N'\n                AND NVL(A.CHG_WRG_YN,'N')='N'\n                AND A.PROC_CD= :PROC_CD) AS L2_SND_QTY\n            ,NULL AS QRT_END_YN\n            ,NULL AS WDR_END_YN\n            ,DECODE(:WK_TP,'U','Y','N') AS SLP_END_YN\n            ,NULL AS ENT_PTL_YN\n            ,DECODE(:WK_TP,'S',TO_CHAR(NVL(TO_CHAR('','YYYYMMDDHH24MISS'), SYSDATE),'YYYYMMDDHH24MISS')) AS WK_STR_DH\n            ,NULL AS WK_END_DH    \n            ,NULL AS PCOIL_ID\n            ,NULL AS SPARE\n            ,DECODE(:WK_TP,'U','Y','N') AS CHG_WRG_YN\n        FROM \n             TB_M47_COIL_CMN    C\n            ,TB_M47_WK_INST_CMN A\n        WHERE\n                C.COIL_ID = A.COIL_ID\n--            AND C.PROC_CD = A.PROC_CD\n--            AND C.PLN_PROC_SEQ = A.PLN_PROC_SEQ\n            AND C.RCD_STS_TP IN ('1','2')\n            AND C.WK_PRG_STS IN ('E1','F1')\n            AND NVL(A.L2_SND_YN,'N')='N'\n            AND NVL(A.CHG_WRG_YN,'N')='N'\n            AND A.PROC_CD= :PROC_CD\n        ORDER BY A.WORD_DD, A.MO_WK_RNK, A.COIL_WK_RNK \n    ) T\nWHERE \n    ROWNUM = 1\n         ]]>"
+        },
+        "B17R2010.L2N.select": {
+            "id": "B17R2010.L2N.select",
+            "desc": "B17R2010_작업진행상태를 관제로 전송하기위한 Data를 조회한다.",
+            "file_name": "B17R2010-query.glue_sql",
+            "query_map_desc": "B17R2010_재료진행상태관제전송",
+            "query": "<![CDATA[\nSELECT  /*+ M47   재료진행상태관제전송   B17R2010.L2N.select   박철오  */\n    -- 관제로 전송할 정보 조회\n    -- WK_TP => \n    -- 'I' => 작업지시\n    -- 'U' => 보급\n    -- 'S' => 공정\n    -- 'A' => 소둔\n    -- 'E' => 보급시점 L2전송\n    'B17R2010'    AS TC_CD\n    ,MESAPUSER.PL_M00_CONST_VALUE.FAC_CD_BUSAN AS FAC_CD\n    ,A.PROC_CD\n    ,C.MO_NO\n    ,A.MO_PTL_SEQ_NO\n    ,A.COIL_ID\n    ,A.PLN_PROC_SEQ\n    ,DECODE(:WK_TP,'I','F','E','F','U','G','S','G','') AS PRG_CD\n    ,DECODE(:WK_TP,'I','F1','E','F1','U','G1','S','G2','') AS WK_PRG_STS\n    ,'N' AS L2_SND_YN\n    ,1 AS L2_SND_QTY\n    ,NULL AS QRT_END_YN\n    ,NULL AS WDR_END_YN\n    ,DECODE(:WK_TP,'U','Y','N') AS SLP_END_YN\n    ,NULL AS ENT_PTL_YN\n    ,DECODE(:WK_TP,'S',TO_CHAR(NVL(TO_CHAR('','YYYYMMDDHH24MISS'), SYSDATE),'YYYYMMDDHH24MISS')) AS WK_STR_DH\n    ,NULL AS WK_END_DH    \n    ,NULL AS PCOIL_ID\n    ,NULL AS SPARE\n    ,DECODE(:WK_TP,'U','Y','N') AS CHG_WRG_YN\nFROM \n     TB_M47_COIL_CMN    C\n    ,TB_M47_WK_INST_CMN A\nWHERE\n        C.COIL_ID = A.COIL_ID\n    AND C.PROC_CD = A.PROC_CD\n    AND C.PLN_PROC_SEQ = A.PLN_PROC_SEQ\n    AND C.RCD_STS_TP IN ('1','2')\n    AND C.WK_PRG_STS IN ('E1','F1')\n    AND NVL(A.L2_SND_YN,'N')='N'\n    AND NVL(A.CHG_WRG_YN,'N')='N'\n    AND A.PROC_CD= :PROC_CD\n         ]]>"
+        },
+        "B17R2010.L2N.select.1row": {
+            "id": "B17R2010.L2N.select.1row",
+            "desc": "B17R2010_작업진행상태를 관제로 전송하기위한 Data를 조회한다.",
+            "file_name": "B17R2010-query.glue_sql",
+            "query_map_desc": "B17R2010_재료진행상태관제전송",
+            "query": "<![CDATA[\nSELECT  /*+ M47   재료진행상태관제전송   B17R2010.L2N.select.1row   박철오  */\n    -- 관제로 전송할 정보 조회\n    -- WK_TP => \n    -- 'I' => 작업지시\n    -- 'U' => 보급\n    -- 'S' => 공정\n    -- 'A' => 소둔\n    -- 'E' => 보급시점 L2전송\n    'B17R2010'    AS TC_CD\n    ,MESAPUSER.PL_M00_CONST_VALUE.FAC_CD_BUSAN AS FAC_CD\n    ,A.PROC_CD\n    ,C.MO_NO\n    ,A.MO_PTL_SEQ_NO\n    ,A.COIL_ID\n    ,A.PLN_PROC_SEQ\n    ,DECODE(:WK_TP,'I','F','E','F','U','G','S','G','') AS PRG_CD\n    ,DECODE(:WK_TP,'I','F1','E','F1','U','G1','S','G2','') AS WK_PRG_STS\n    ,'N' AS L2_SND_YN\n    ,(SELECT \n                COUNT(*) \n          FROM TB_M47_COIL_CMN    C\n              ,TB_M47_WK_INST_CMN A\n          WHERE\n                C.COIL_ID = A.COIL_ID\n            AND C.RCD_STS_TP IN ('1','2')\n            AND C.WK_PRG_STS IN ('E1','F1')\n            AND NVL(A.L2_SND_YN,'N')='N'\n            AND NVL(A.CHG_WRG_YN,'N')='N'\n            AND A.PROC_CD= :PROC_CD) AS L2_SND_QTY\n    ,NULL AS QRT_END_YN\n    ,NULL AS WDR_END_YN\n    ,DECODE(:WK_TP,'U','Y','N') AS SLP_END_YN\n    ,NULL AS ENT_PTL_YN\n    ,DECODE(:WK_TP,'S',TO_CHAR(NVL(TO_CHAR('','YYYYMMDDHH24MISS'), SYSDATE),'YYYYMMDDHH24MISS')) AS WK_STR_DH\n    ,NULL AS WK_END_DH    \n    ,NULL AS PCOIL_ID\n    ,NULL AS SPARE\n    ,DECODE(:WK_TP,'U','Y','N') AS CHG_WRG_YN\nFROM \n     TB_M47_COIL_CMN    C\n    ,TB_M47_WK_INST_CMN A\nWHERE\n        C.COIL_ID = A.COIL_ID\n    AND C.RCD_STS_TP IN ('1','2')\n    AND C.WK_PRG_STS IN ('E1','F1')\n    AND NVL(A.L2_SND_YN,'N')='N'\n    AND NVL(A.CHG_WRG_YN,'N')='N'\n    AND A.PROC_CD= :PROC_CD\n    AND ROWNUM=1\n         ]]>"
+        },
+        "B17R2010.ann.select": {
+            "id": "B17R2010.ann.select",
+            "desc": "B17R2010_작업진행상태를 관제로 전송하기위한 Data를 조회한다.",
+            "file_name": "B17R2010-query.glue_sql",
+            "query_map_desc": "B17R2010_재료진행상태관제전송",
+            "query": "<![CDATA[\nSELECT  /*+ M47   재료진행상태관제전송   B17R2010.ann.select   박철오  */\n    -- 관제로 전송할 정보 조회\n    -- WK_TP => \n    -- 'I' => 작업지시\n    -- 'U' => 보급\n    -- 'S' => 공정\n    -- 'A' => 소둔\n    -- 'E' => 보급시점 L2전송\n    'B17R2010'    AS TC_CD\n    ,MESAPUSER.PL_M00_CONST_VALUE.FAC_CD_BUSAN AS FAC_CD\n    ,A.PROC_CD\n    ,C.MO_NO\n    ,A.MO_PTL_SEQ_NO\n    ,A.COIL_ID\n    ,A.PLN_PROC_SEQ\n    ,DECODE(:WK_TP,'I','F','E','F','U','G','S','G','') AS PRG_CD\n    ,DECODE(:WK_TP,'I','F1','E','F1','U','G1','S','G2','') AS WK_PRG_STS\n    ,'N' AS L2_SND_YN\n    ,1 AS L2_SND_QTY\n    ,NULL AS QRT_END_YN\n    ,NULL AS WDR_END_YN\n    ,DECODE(:WK_TP,'U','Y','N') AS SLP_END_YN\n    ,NULL AS ENT_PTL_YN\n    ,DECODE(:WK_TP,'S',TO_CHAR(NVL(TO_CHAR('','YYYYMMDDHH24MISS'), SYSDATE),'YYYYMMDDHH24MISS')) AS WK_STR_DH\n    ,NULL AS WK_END_DH    \n    ,NULL AS PCOIL_ID\n    ,NULL AS SPARE\n    ,DECODE(:WK_TP,'U','Y','N') AS CHG_WRG_YN\nFROM \n     TB_M47_COIL_CMN    C\n    ,TB_M47_WK_INST_CMN A\nWHERE\n        C.COIL_ID = A.COIL_ID\n    AND C.PLN_PROC_SEQ = A.PLN_PROC_SEQ\n    AND C.RCD_STS_TP IN ('1','2')\n    AND A.ANN_BTH_CRT_DH = TO_DATE(:ANN_BTH_CRT_DH,'YYYYMMDDHH24MISS')\n         ]]>"
+        },
+        "B17R2010.ann.cancelBth.select": {
+            "id": "B17R2010.ann.cancelBth.select",
+            "desc": "B17R2010_작업진행상태를 관제로 전송하기위한 Data를 조회한다.",
+            "file_name": "B17R2010-query.glue_sql",
+            "query_map_desc": "B17R2010_재료진행상태관제전송",
+            "query": "<![CDATA[\nSELECT  /*+ M47   재료진행상태관제전송   B17R2010.ann.cancelBth.select   박철오  */\n    -- 관제로 전송할 정보 조회\n    -- WK_TP => \n    -- 'I' => 작업지시\n    -- 'U' => 보급\n    -- 'S' => 공정\n    -- 'A' => 소둔\n    -- 'E' => 보급시점 L2전송\n    'B17R2010'    AS TC_CD\n    ,MESAPUSER.PL_M00_CONST_VALUE.FAC_CD_BUSAN AS FAC_CD\n    ,A.PROC_CD\n    ,C.MO_NO\n    ,A.MO_PTL_SEQ_NO\n    ,A.COIL_ID\n    ,A.PLN_PROC_SEQ\n    ,DECODE(:WK_TP,'I','F','E','F','U','G','S','G','') AS PRG_CD\n    ,DECODE(:WK_TP,'I','F1','E','F1','U','G1','S','G2','') AS WK_PRG_STS\n    ,'N' AS L2_SND_YN\n    ,1 AS L2_SND_QTY\n    ,NULL AS QRT_END_YN\n    ,NULL AS WDR_END_YN\n    ,DECODE(:WK_TP,'U','Y','N') AS SLP_END_YN\n    ,NULL AS ENT_PTL_YN\n    ,DECODE(:WK_TP,'S',TO_CHAR(NVL(TO_CHAR('','YYYYMMDDHH24MISS'), SYSDATE),'YYYYMMDDHH24MISS')) AS WK_STR_DH\n    ,NULL AS WK_END_DH    \n    ,NULL AS PCOIL_ID\n    ,NULL AS SPARE\n    ,DECODE(:WK_TP,'U','Y','N') AS CHG_WRG_YN\n    ,'1' AS WK_CNL_TP\nFROM \n     \n      TB_M47_WK_INST_CMN A\n    , TB_M47_WK_ACT_ANNB B\n    , TB_M47_COIL_CMN    C\nWHERE\n        C.COIL_ID = A.COIL_ID\n    AND C.PLN_PROC_SEQ = A.PLN_PROC_SEQ\n    AND C.RCD_STS_TP IN ('1','2')\n    AND NVL(A.CHG_WRG_YN,'N')='Y'\n    AND C.ANN_STS = 'Y'\n    AND C.PROC_CD = :PROC_CD\n    AND A.PROC_CD LIKE '4%'\n    AND C.COIL_ID = B.COIL_ID\n   \tAND B.ANN_BTH_ID = :ANN_BTH_ID\n         ]]>"
+        },
+        "B17R2010.unload.select": {
+            "id": "B17R2010.unload.select",
+            "desc": "보급/투입 재료진행상태전문 정보를 조회한다.",
+            "file_name": "B17R2010-query.glue_sql",
+            "query_map_desc": "B17R2010_재료진행상태관제전송",
+            "query": "<![CDATA[\nSELECT  /*+ M47   재료진행상태관제전송   B17R2010.unload.select   박철오  */\n    -- 관제로 전송할 정보 조회\n    -- WK_TP => \n    -- 'I' => 작업지시\n    -- 'U' => 보급\n    -- 'S' => 공정투입\n    'B17R2010'    AS TC_CD\n    ,MESAPUSER.PL_M00_CONST_VALUE.FAC_CD_BUSAN AS FAC_CD\n    ,A.PROC_CD\n    ,C.MO_NO\n    ,A.MO_PTL_SEQ_NO\n    ,A.COIL_ID\n    ,A.PLN_PROC_SEQ\n    ,DECODE(:WK_TP,'I','F','U','G','S','G','') AS PRG_CD\n    ,DECODE(:WK_TP,'I','F1','U','G1','S','G2','') AS WK_PRG_STS\n    ,DECODE(:WK_TP,'I','Y','U','Y','S','Y') AS L2_SND_YN\n    ,1 AS L2_SND_QTY\n    ,NULL AS QRT_END_YN\n    ,NULL AS WDR_END_YN\n    ,DECODE(:WK_TP,'U','Y','') AS SLP_END_YN\n    ,NULL AS ENT_PTL_YN\n    ,DECODE(:WK_TP,'S',TO_CHAR(NVL(TO_CHAR('','YYYYMMDDHH24MISS'), SYSDATE),'YYYYMMDDHH24MISS')) AS WK_STR_DH\n    ,NULL AS WK_END_DH    \n    ,NULL AS PCOIL_ID\n    ,NULL AS SPARE\n    ,DECODE(:WK_TP,'U','Y','S','Y','') AS CHG_WRG_YN\nFROM \n      TB_M47_WK_INST_CMN A\n     ,TB_M47_COIL_CMN    C\nWHERE\n        A.COIL_ID = :COIL_ID\n  AND   A.PROC_CD = :PROC_CD\n  AND   A.PLN_PROC_SEQ = (SELECT MAX(PLN_PROC_SEQ)\n                            FROM TB_M47_WK_INST_CMN\n                           WHERE COIL_ID = :COIL_ID\n                             AND PROC_CD = :PROC_CD)\n  AND   A.COIL_ID = C.COIL_ID\n         ]]>"
+        },
+        "B17R2010.cancel.select": {
+            "id": "B17R2010.cancel.select",
+            "desc": "보급/투입 취소 재료진행상태전문 정보를 조회한다.",
+            "file_name": "B17R2010-query.glue_sql",
+            "query_map_desc": "B17R2010_재료진행상태관제전송",
+            "query": "<![CDATA[\nSELECT  /*+ M47   재료진행상태관제전송   B17R2010.cancel.select   박철오  */\n    -- 관제로 전송할 정보 조회\n    -- WK_TP => \n    -- 'U' => 보급 취소\n    -- 'S' => 공정투입 취소\n    'B17R2010'    AS TC_CD\n    ,MESAPUSER.PL_M00_CONST_VALUE.FAC_CD_BUSAN AS FAC_CD\n    ,B.PROC_CD\n    ,A.MO_NO\n    ,B.MO_PTL_SEQ_NO\n    ,B.COIL_ID\n    ,B.PLN_PROC_SEQ\n    ,DECODE(:WK_TP,'U','F','S','G',A.PRG_CD) AS PRG_CD\n    ,DECODE(:WK_TP,'U','F1','S','G1',A.WK_PRG_STS) AS WK_PRG_STS\n    ,NULL AS L2_SND_YN\n    ,1 AS L2_SND_QTY\n    ,NULL AS QRT_END_YN\n    ,NULL AS WDR_END_YN\n    ,NULL AS SLP_END_YN\n    ,NULL AS ENT_PTL_YN\n    ,NULL AS WK_STR_DH\n    ,NULL AS WK_END_DH    \n    ,NULL AS PCOIL_ID\n    ,NULL AS SPARE\n    ,NULL AS CHG_WRG_YN\n    ,:WK_CNL_TP AS WK_CNL_TP\nFROM \n       TB_M47_COIL_CMN    A \n      ,TB_M47_WK_INST_CMN B\nWHERE\n        B.PROC_CD = :PROC_CD\n  AND   B.COIL_ID = :COIL_ID\n  AND   B.COIL_ID = A.COIL_ID\n  AND   B.PLN_PROC_SEQ = (SELECT MAX(PLN_PROC_SEQ)\n                            FROM TB_M47_WK_INST_CMN\n                           WHERE COIL_ID = :COIL_ID\n                             AND PROC_CD = :PROC_CD)\n         ]]>"
+        },
+        "B17R2010.case1.select": {
+            "id": "B17R2010.case1.select",
+            "desc": "재료진행상태 정보 조회 case1",
+            "file_name": "B17R2010-query.glue_sql",
+            "query_map_desc": "B17R2010_재료진행상태관제전송",
+            "query": "<![CDATA[\nSELECT  /*+ M47   재료진행상태관제전송   B17R2010.case1.select   박철오  */\n\t-- 관제로 전송할 정보 조회\n    -- WK_TP => \n    -- 'I' => 작업지시\n    -- 'U' => 보급\n    -- 'S' => 공정\n    'B17R2010'    AS TC_CD\n    ,MESAPUSER.PL_M00_CONST_VALUE.FAC_CD_BUSAN AS FAC_CD\n    ,A.PROC_CD\n    ,C.MO_NO\n    ,A.MO_PTL_SEQ_NO\n    ,A.COIL_ID\n    ,DECODE(:WK_TP,'I','F','U','G','S','G','') AS PRG_CD\n    ,DECODE(:WK_TP,'I','F1','U','G1','S','G2','') AS WK_PRG_STS\n    ,DECODE(:WK_TP,'I','Y','U','Y') AS L2_SND_YN\n    ,DECODE(:WK_TP,'U','Y','') AS CHG_WRG_YN\n    ,1 AS L2_SND_QTY\n    ,NULL AS QRT_END_YN\n    ,NULL AS WDR_END_YN\n    ,NULL AS SLP_END_YN\n    ,A.PLN_PROC_SEQ\nFROM\n     TB_M47_WK_INST_CMN A\n    ,TB_M47_COIL_CMN   C\nWHERE\n         A.PROC_CD= :PROC_CD\n    AND  A.L2_SND_YN='N'\n    AND  A.COIL_ID = C.COIL_ID\n         ]]>"
+        },
+        "B17R2010.case2.select": {
+            "id": "B17R2010.case2.select",
+            "desc": "재료진행상태 정보 조회 case2",
+            "file_name": "B17R2010-query.glue_sql",
+            "query_map_desc": "B17R2010_재료진행상태관제전송",
+            "query": "<![CDATA[\nSELECT  /*+ M47   재료진행상태관제전송   B17R2010.case2.select   박철오  */\n\t-- 관제로 전송할 정보 조회\n    'B17R2010'    AS TC_CD\n    ,MESAPUSER.PL_M00_CONST_VALUE.FAC_CD_BUSAN AS FAC_CD\n    ,A.PROC_CD\n    ,C.MO_NO\n    ,A.MO_PTL_SEQ_NO\n    ,A.COIL_ID\n    ,'F' AS PRG_CD\n    ,'F1' AS WK_PRG_STS\n    ,NULL AS L2_SND_YN\n    ,NULL AS CHG_WRG_YN\n    ,NULL AS L2_SND_QTY\n    ,NULL AS QRT_END_YN\n    ,NULL AS WDR_END_YN\n    ,NULL AS SLP_END_YN\n    ,A.PLN_PROC_SEQ\nFROM\n     TB_M47_WK_INST_CMN A\n    ,TB_M47_COIL_CMN    C\nWHERE\n         A.PROC_CD= :PROC_CD\n    AND  A.L2_SND_YN='N'\n    AND  A.COIL_ID = C.COIL_ID\n         ]]>"
+        },
+        "B17R2010.procInput.select": {
+            "id": "B17R2010.procInput.select",
+            "desc": "재료진행상태 정보 조회 case2",
+            "file_name": "B17R2010-query.glue_sql",
+            "query_map_desc": "B17R2010_재료진행상태관제전송",
+            "query": "<![CDATA[\nSELECT  /*+ M47   재료진행상태관제전송   B17R2010.procInput.select   박철오  */\n    'B17R2010'    AS TC_CD\n    ,A.FAC_CD\n    ,A.PROC_CD\n    ,A.MO_NO\n    ,A.MO_PTL_SEQ_NO\n    ,A.COIL_ID\n    ,A.PLN_PROC_SEQ\n    ,'G' AS PRG_CD\n    ,'G2' AS WK_PRG_STS\n    ,'Y' AS L2_SND_YN\n    ,1 AS L2_SND_QTY\n    ,NULL AS QRT_END_YN\n    ,NULL AS WDR_END_YN\n    ,'Y' AS SLP_END_YN\n    ,NULL AS ENT_PTL_YN\n    ,TO_CHAR(NVL(TO_CHAR('','YYYYMMDDHH24MISS'), SYSDATE),'YYYYMMDDHH24MISS') AS WK_STR_DH\n    ,NULL AS WK_END_DH    \n    ,NULL AS PCOIL_ID\n    ,NULL AS SPARE\n    ,'Y' AS CHG_WRG_YN\nFROM\n    TB_M47_COIL_CMN A\nWHERE\n         A.PROC_CD = :PROC_CD\n    AND  A.COIL_ID = :COIL_ID\n         ]]>"
+        },
+        "B17R2010.ann.cancelBas.select": {
+            "id": "B17R2010.ann.cancelBas.select",
+            "desc": "베이스 취소(재료진행실적) 전문 데이터를 조회한다.",
+            "file_name": "B17R2010-query.glue_sql",
+            "query_map_desc": "B17R2010_재료진행상태관제전송",
+            "query": "<![CDATA[\nSELECT  /*+ M47   재료진행상태관제전송   B17R2010.ann.cancelBas.select   박철오  */\n    -- 관제로 전송할 정보 조회\n    -- WK_TP => \n    -- 'I' => 작업지시\n    -- 'U' => 보급\n    -- 'S' => 공정\n    -- 'A' => 소둔\n    -- 'E' => 보급시점 L2전송\n    'B17R2010'    AS TC_CD\n    ,MESAPUSER.PL_M00_CONST_VALUE.FAC_CD_BUSAN AS FAC_CD\n    ,A.PROC_CD\n    ,C.MO_NO\n    ,A.MO_PTL_SEQ_NO\n    ,A.COIL_ID\n    ,A.PLN_PROC_SEQ\n    ,'G' AS PRG_CD\n    ,'G1' AS WK_PRG_STS\n    ,'N' AS L2_SND_YN\n    ,1 AS L2_SND_QTY\n    ,NULL AS QRT_END_YN\n    ,NULL AS WDR_END_YN\n    ,'Y' AS SLP_END_YN\n    ,NULL AS ENT_PTL_YN\n    ,NULL AS WK_STR_DH\n    ,NULL AS WK_END_DH    \n    ,NULL AS PCOIL_ID\n    ,NULL AS SPARE\n    ,'Y' AS CHG_WRG_YN\n    ,'4' AS WK_CNL_TP\nFROM \n     TB_M47_COIL_CMN    C\n    ,TB_M47_WK_INST_CMN A\nWHERE\n        C.COIL_ID = A.COIL_ID\n    AND C.PLN_PROC_SEQ = A.PLN_PROC_SEQ\n    AND C.RCD_STS_TP IN ('1','2')\n    AND A.PROC_CD LIKE '4%'\n    AND C.COIL_ID IN(SELECT\n                         A.COIL_ID\n                      FROM  \n                         TB_M47_COIL_CMN A\n                        ,TB_M47_WK_ACT_ANNB B\n                     WHERE  \n                             A.COIL_ID = B.COIL_ID\n                        AND  B.ANN_BTH_ID = :ANN_BTH_ID\n                        AND  A.ANN_STS ='2')\n         ]]>"
+        }
+    },
+    "b47": {
+        "B47SA508_1.select": {
+            "id": "B47SA508_1.select",
+            "desc": "부산_조업관리_송신_작업실적요구 송신 조회",
+            "file_name": "B47SA508.glue_sql",
+            "query_map_desc": "부산_조업관리_송신_작업실적요구 송신",
+            "query": "<![CDATA[\nSELECT    /*+ M47 부산_조업관리_송신_작업실적요구 송신  B47SA508_1.select 정장현 */\n          COIL_ID\n        , MO_NO\nFROM TB_M47_WK_INST_CMN\nWHERE COIL_ID = :COIL_ID\n         ]]>"
+        }
+    }    
+}
