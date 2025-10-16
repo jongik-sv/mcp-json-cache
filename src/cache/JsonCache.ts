@@ -105,7 +105,8 @@ export class JsonCache {
   }
 
   /**
-   * 키로 값 검색 (대소문자 무시, b17. 접두사 자동 처리)
+   * 키로 값 검색 (대소문자 무시, 동적 접두사 자동 처리)
+   * b17., b30., m17., m30., m47. 등 최상위 섹션 자동 처리
    */
   public get(key: string): any | undefined {
     try {
@@ -120,25 +121,39 @@ export class JsonCache {
         return this.resolveNestedKey(matchedKey, this.data);
       }
 
-      // 2. b17. 접두사 추가해서 찾기 (대소문자 무시)
-      if (!key.toLowerCase().startsWith('b17.')) {
-        const keyWithPrefix = 'b17.' + key;
-        matchedKey = allKeys.find(k => k.toLowerCase() === keyWithPrefix.toLowerCase());
-        if (matchedKey) {
-          return this.resolveNestedKey(matchedKey, this.data);
+      // 2. 최상위 섹션 키 추출 (예: data["b17"], data["m30"] 등)
+      const topLevelKeys = Object.keys(this.data);
+
+      // 2a. 최상위 섹션 중 하나를 접두사로 추가해서 찾기
+      // 예: "M301001020.cancelCrynInf" → "m30.M301001020.cancelCrynInf"
+      for (const topKey of topLevelKeys) {
+        if (!key.toLowerCase().startsWith(topKey.toLowerCase() + '.')) {
+          const keyWithPrefix = topKey + '.' + key;
+          matchedKey = allKeys.find(k => k.toLowerCase() === keyWithPrefix.toLowerCase());
+          if (matchedKey) {
+            return this.resolveNestedKey(matchedKey, this.data);
+          }
         }
       }
 
-      // 3. b17. 접두사 제거해서 찾기 (대소문자 무시)
-      if (key.toLowerCase().startsWith('b17.')) {
-        const keyWithoutPrefix = key.substring(4);
-        matchedKey = allKeys.find(k => k.toLowerCase() === keyWithoutPrefix.toLowerCase());
-        if (matchedKey) {
-          return this.resolveNestedKey(matchedKey, this.data);
+      // 2b. 키가 이미 최상위 섹션을 포함하고 있다면 제거해서 시도
+      for (const topKey of topLevelKeys) {
+        const prefix = topKey.toLowerCase() + '.';
+        if (key.toLowerCase().startsWith(prefix)) {
+          const keyWithoutPrefix = key.substring(topKey.length + 1);
+          matchedKey = allKeys.find(k => k.toLowerCase() === keyWithoutPrefix.toLowerCase());
+          if (matchedKey) {
+            return this.resolveNestedKey(matchedKey, this.data);
+          }
+          // 또는 원래 key로 바로 시도
+          matchedKey = allKeys.find(k => k.toLowerCase() === key.toLowerCase());
+          if (matchedKey) {
+            return this.resolveNestedKey(matchedKey, this.data);
+          }
         }
       }
 
-      // 4. 원래 키로 마지막 시도
+      // 3. 원래 키로 마지막 시도 (중첩 경로 지원)
       return this.resolveNestedKey(key, this.data);
 
     } catch (error) {
