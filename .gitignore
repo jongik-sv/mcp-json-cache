@@ -37,3 +37,7 @@ coverage/
 tmp/
 temp/
 *.tmp
+
+.claude/
+
+.serena/
