@@ -300,9 +300,15 @@ export class ConfigManager {
    * 웹 서버 설정 반환
    */
   public getWebConfig() {
+    // WEB_PORT가 범위로 지정된 경우 (예: "6315-6325") 시작 포트만 사용
+    const portEnv = process.env.WEB_PORT || '6315';
+    const portValue = portEnv.includes('-')
+      ? parseInt(portEnv.split('-')[0], 10)
+      : parseInt(portEnv, 10);
+
     return {
       enabled: process.env.WEB_ENABLED !== 'false',
-      port: parseInt(process.env.WEB_PORT || '6315', 10),
+      port: portValue,
       host: process.env.WEB_HOST || 'localhost'
     };
   }

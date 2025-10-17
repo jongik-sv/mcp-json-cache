@@ -106,7 +106,7 @@ set JSON_SOURCES=queries:C:/data/queries.json;procedures:C:/data/procedures.json
 # 웹 서버 비활성화
 set WEB_ENABLED=false
 
-# 포트 변경 (기본값: 6315)
+# 포트 변경 (기본값: 6315, 사용 중이면 자동으로 다음 포트 시도)
 set WEB_PORT=3000
 
 # 호스트 변경 (기본값: localhost)
@@ -423,7 +423,7 @@ http://localhost:6315
 **서버가 시작되지 않을 때:**
 - Node.js 16+가 설치되었는지 확인
 - `npm install`이 성공적으로 완료되었는지 확인
-- 포트 6315가 이미 사용 중인지 확인
+- 서버는 포트가 사용 중이면 자동으로 다음 사용 가능한 포트를 찾습니다 (6315-6325)
 
 **JSON 파일이 로드되지 않을 때:**
 - 파일 경로가 정확하고 절대경로인지 확인

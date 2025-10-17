@@ -106,7 +106,7 @@ set JSON_SOURCES=queries:C:/data/queries.json;procedures:C:/data/procedures.json
 # Disable web server
 set WEB_ENABLED=false
 
-# Change port (default: 6315)
+# Change port (default: 6315, auto-tries next port if busy)
 set WEB_PORT=3000
 
 # Change host (default: localhost)
@@ -423,7 +423,7 @@ http://localhost:6315
 **Server won't start:**
 - Check that Node.js 16+ is installed
 - Verify `npm install` completed successfully
-- Check port 6315 isn't already in use
+- Server auto-finds available port if requested port is busy (tries 6315-6325)
 
 **JSON files not loading:**
 - Verify file paths are correct and absolute
