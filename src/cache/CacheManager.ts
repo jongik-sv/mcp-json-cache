@@ -198,8 +198,8 @@ export class CacheManager {
       allKeys = allKeys.filter(key => key.startsWith(prefix));
     }
 
-    // 정렬 및 개수 제한 (최대 500개)
-    return allKeys.sort().slice(0, 500);
+    // 정렬 (개수 제한은 웹 API 레벨에서 처리)
+    return allKeys.sort();
   }
 
   /**

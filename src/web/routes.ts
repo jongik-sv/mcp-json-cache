@@ -89,8 +89,8 @@ export function setupRoutes(app: Express, cacheManager: CacheManager): void {
       let keys: string[] = [];
 
       if (source) {
-        // 특정 소스의 키 목록
-        const sourceKeys = cacheManager.getKeys(source, undefined, maxDepth);
+        // 특정 소스의 키 목록 - 첫 번째 레벨 키만 반환 (maxDepth=0)
+        const sourceKeys = cacheManager.getKeys(source, undefined, 0);
 
         if (search) {
           // 검색어로 필터링 (b17/b47 접두사 자동 처리)
@@ -98,8 +98,11 @@ export function setupRoutes(app: Express, cacheManager: CacheManager): void {
             const keyLower = key.toLowerCase();
             const searchLower = search.toLowerCase();
 
-            // 정확히 일치
-            if (keyLower === searchLower) return true;
+            // 정확히 일치하는 검색어는 제외 (하위 키만 표시)
+            if (keyLower === searchLower) return false;
+
+            // 검색어로 시작하되 검색어 자체는 제외
+            if (keyLower.startsWith(searchLower + '.')) return true;
 
             // 검색어 포함
             if (keyLower.includes(searchLower)) return true;
@@ -108,21 +111,24 @@ export function setupRoutes(app: Express, cacheManager: CacheManager): void {
             if (!searchLower.startsWith('b17.') && !searchLower.startsWith('b47.')) {
               const withB17 = 'b17.' + searchLower;
               const withB47 = 'b47.' + searchLower;
-              if (keyLower === withB17 || keyLower === withB47) return true;
+              if (keyLower === withB17 || keyLower === withB47) return false;
+              if (keyLower.startsWith(withB17 + '.') || keyLower.startsWith(withB47 + '.')) return true;
               if (keyLower.includes(withB17) || keyLower.includes(withB47)) return true;
             }
 
             // b17. 접두사 제거하고 비교
             if ((searchLower.startsWith('b17.') || searchLower.startsWith('b47.'))) {
               const withoutPrefix = searchLower.substring(4);
-              if (keyLower === withoutPrefix || keyLower.includes(withoutPrefix)) return true;
+              if (keyLower === withoutPrefix) return false;
+              if (keyLower.startsWith(withoutPrefix + '.')) return true;
+              if (keyLower.includes(withoutPrefix)) return true;
             }
 
             return false;
           });
         } else if (prefix) {
-          // 기존 prefix 필터링
-          keys = sourceKeys.filter(key => key.startsWith(prefix));
+          // 기존 prefix 필터링 - 접두사 자체만 허용하고 하위 키는 제외
+          keys = sourceKeys.filter(key => key === prefix);
         } else {
           keys = sourceKeys;
         }
@@ -132,7 +138,8 @@ export function setupRoutes(app: Express, cacheManager: CacheManager): void {
         const allKeys = new Set<string>();
 
         sources.forEach(sourceName => {
-          const sourceKeys = cacheManager.getKeys(sourceName, undefined, maxDepth);
+          // 첫 번째 레벨 키만 반환 (maxDepth=0)
+          const sourceKeys = cacheManager.getKeys(sourceName, undefined, 0);
 
           if (search) {
             // 검색어로 필터링
@@ -140,8 +147,11 @@ export function setupRoutes(app: Express, cacheManager: CacheManager): void {
               const keyLower = key.toLowerCase();
               const searchLower = search.toLowerCase();
 
-              // 정확히 일치
-              if (keyLower === searchLower) return true;
+              // 정확히 일치하는 검색어는 제외 (하위 키만 표시)
+              if (keyLower === searchLower) return false;
+
+              // 검색어로 시작하되 검색어 자체는 제외
+              if (keyLower.startsWith(searchLower + '.')) return true;
 
               // 검색어 포함
               if (keyLower.includes(searchLower)) return true;
@@ -150,22 +160,25 @@ export function setupRoutes(app: Express, cacheManager: CacheManager): void {
               if (!searchLower.startsWith('b17.') && !searchLower.startsWith('b47.')) {
                 const withB17 = 'b17.' + searchLower;
                 const withB47 = 'b47.' + searchLower;
-                if (keyLower === withB17 || keyLower === withB47) return true;
+                if (keyLower === withB17 || keyLower === withB47) return false;
+                if (keyLower.startsWith(withB17 + '.') || keyLower.startsWith(withB47 + '.')) return true;
                 if (keyLower.includes(withB17) || keyLower.includes(withB47)) return true;
               }
 
               // b17. 접두사 제거하고 비교
               if ((searchLower.startsWith('b17.') || searchLower.startsWith('b47.'))) {
                 const withoutPrefix = searchLower.substring(4);
-                if (keyLower === withoutPrefix || keyLower.includes(withoutPrefix)) return true;
+                if (keyLower === withoutPrefix) return false;
+                if (keyLower.startsWith(withoutPrefix + '.')) return true;
+                if (keyLower.includes(withoutPrefix)) return true;
               }
 
               return false;
             });
             filteredKeys.forEach(key => allKeys.add(key));
           } else if (prefix) {
-            // 기존 prefix 필터링
-            sourceKeys.filter(key => key.startsWith(prefix)).forEach(key => allKeys.add(key));
+            // 기존 prefix 필터링 - 접두사 자체만 허용하고 하위 키는 제외
+            sourceKeys.filter(key => key === prefix).forEach(key => allKeys.add(key));
           } else {
             // 모든 키
             sourceKeys.forEach(key => allKeys.add(key));

@@ -336,6 +336,15 @@ export class JsonCache {
     for (const key in obj) {
       if (obj.hasOwnProperty(key)) {
         const fullKey = prefix ? `${prefix}.${key}` : key;
+
+        // maxDepth가 0이면 첫 번째 레벨 키만 반환
+        if (maxDepth === 0) {
+          if (depth === 0) {
+            keys.push(fullKey);
+          }
+          continue; // maxDepth=0이면 더 이상 재귀하지 않음
+        }
+
         keys.push(fullKey);
 
         // maxDepth가 지정되고 현재 depth가 maxDepth-1에 도달하면 재귀 중단
